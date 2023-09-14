@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple E-Commerce</title>
+</head>
+<body>
+    <h1>Welcome to our E-Commerce Store</h1>
+    <div id="products">
+        <div class="product">
+            <h2>Product 1</h2>
+            <p>Price: $10</p>
+            <button onclick="addToCart('Product 1', 10)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <h2>Product 2</h2>
+            <p>Price: $20</p>
+            <button onclick="addToCart('Product 2', 20)">Add to Cart</button>
+        </div>
+    </div>
+    <h2>Shopping Cart</h2>
+    <div id="cart">
+        <!-- Cart items will be displayed here -->
+    </div>
+
+    <script>
+        // Function to add items to the cart
+        function addToCart(productName, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Check if the product is already in the cart
+            const existingItemIndex = cart.findIndex(item => item.name === productName);
+
+            if (existingItemIndex !== -1) {
+                // If the product is in the cart, increase the quantity
+                cart[existingItemIndex].quantity++;
+            } else {
+                // If not, add it to the cart
+                cart.push({ name: productName, price: price, quantity: 1 });
+            }
+
+            // Update the cart in local storage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Refresh the cart display
+            displayCart();
+        }
+
+        // Function to display the cart
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartElement = document.getElementById('cart');
+            cartElement.innerHTML = '';
+
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.innerHTML = `<p>${item.name} - $${item.price} - Quantity: ${item.quantity}</p>`;
+                cartElement.appendChild(itemElement);
+            });
+        }
+
+        // Initialize the cart when the page loads
+        displayCart();
+    </script>
+</body>
+</html>
